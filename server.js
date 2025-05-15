@@ -24,6 +24,24 @@ app.get('/api/allsvenskan/standings', async (req, res) => {
   }
 });
 
+app.get('/api/allsvenskan/history', async (req, res) => {
+  try {
+    const targetUrl = 'https://allsvenskan.se/data-endpoint/match-list/minimized?season=2025';
+    const response = await fetch(targetUrl);
+
+    if (!response.ok) {
+      return res.status(response.status).send('Failed to fetch data');
+    }
+
+    const data = await response.json();
+    res.json(data);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+});
+
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Proxy running at http://localhost:${PORT}/api/allsvenskan/standings`);
+  console.log(`http://localhost:${PORT}/api/allsvenskan/standings`);
+  console.log(`http://localhost:${PORT}/api/allsvenskan/history`);
 });
